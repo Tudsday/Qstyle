@@ -1,0 +1,63 @@
+{load header}
+
+<style type="text/css">
+    #mytable{ width: 480px; border-collapse: collapse;}
+    #mytable td{ border: 1px solid #AED7EE; padding: 3px; line-height: 22px;}
+</style>
+
+<script src="{__jquery-1.11.2.min.js}" type="text/javascript"></script>
+<script type="text/javascript">
+    var rand=1;
+    function ajax_sub(){
+        // 这儿处理一段ajax请求, 注意它带有参数
+        $.get('./block.php?ajax=1&rand='+rand,function (data){
+           $('#ajaxsub').html(data); 
+        });
+        rand = rand+1;
+    }
+</script>
+{abc}
+<h1>功能为演示Block的相关应用</h1>
+
+#INFO: 注意看这儿,它的值来源于block,在block中, 许多语法都可以使用.
+<h3>普通模式: </h3>
+{minfo}
+
+#INFO: 注意看div这儿,它原本是一个ajax按钮, 然后去后台工作.
+#INFO: 在设计时, 你可以先将block段显示出来, 调试完成后, 再去掉, 然后ajax工作.
+<h2>ajax模式取值: <input onclick="ajax_sub()" type="submit" value="ajax请求" /></h2>
+<div id="ajaxsub">ajax内容会显示在这.</div>
+{block $minfo}
+{load footer}
+
+
+{block minfo}
+   <span style="color: red;">系统当前时间值为: {$dateinfo}</span>
+{/block}
+
+{block ajax_info}
+<table id="mytable">
+<tr>
+	<td>id</td>
+	<td>用户名</td>
+	<td>金钱</td>
+	<td>管理</td>
+</tr>
+<tr>
+	<td>{$dateinfo} {__jquery-1.11.2.min.js}</td>
+	<td>tuesday</td>
+	<td>150000</td>
+	<td>dele</td>
+</tr>
+<tr>
+	<td>2</td>
+	<td>pcuser</td>
+	<td>1.230</td>
+	<td>{abc}</td>
+</tr>
+</table>
+{/block}
+
+{block minfosss}
+   <span style="color: red;">test</span>
+{/block}

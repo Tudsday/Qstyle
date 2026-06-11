@@ -1,0 +1,3 @@
+#info: css js解释工作仅支持简单的变量, 数组, 常量,自动搜索.
+#info: 注意看下面有一个变量值
+#myid{ height: 550px; background: url({__xampps.jpg});  background-repeat: no-repeat; color: {$color};}

@@ -1,0 +1,20 @@
+{load header}
+<h2>CSS / JS引入段示例, 请看源模板</h2>
+
+#info:注意看源文件解析效果, js文件已经被编译. 也就是它永远保存进缓存目录.
+<script>{__jquery-1.11.2.min.js}</script>
+
+
+#info:下面这种模式, 程序将读取原目录路径,并不做解析.
+<script src="{__jquery-1.11.2.min.js}"></script>
+
+
+#info: css 引用的效果类似.
+<style>{__in.css}</style>
+
+#info: 假如你需要纯引用自己的css, 那可以用link, 只有当 type="*/php" 里面有/php字样时, 它才会解析.
+<link type="text/css" href="{__in.css}" />
+
+<div id="myid"><br /><br /><br />我是一段id值</div>
+
+<div>路径自动搜索: {__jquery-1.11.2.min.js}</div>

@@ -1,0 +1,42 @@
+#info: 注意下面调用的是变量值.
+{load $header}
+
+<h1>一些基础功能演示</h1>
+
+<a href="" title="你可以看到:{LF}我是下一行吗?">滑标放上面, title 换行演示</a>
+
+<br /><br />
+#info:功能仅用来显示一些普通判断.
+<span>假如变量不存在, 显示后面的值{$ABC[aaa][ccc]|emtpy};  更深入: {$header|$header|0}</span>
+
+<br /><br />
+#info: 模板, CSS, JS当中支持三种语法的注释. 不区分大小写.
+<h2>三种注释语法: </h2>
+#info & #todo & #bug
+
+
+<br /><br />
+#info: 支持无限套入的数组
+<h2>无限套入的数组</h2>
+<div>数组值: {$string[$a][$b][$c][$d]}; 支持类属性Cnf_suffix: {$Qstyle->Cnf_suffix}</div>
+<div>
+<!--{loop $newarr $key $val}-->
+    {$key} = {$val} <br />
+<!--{/loop}-->
+</div>
+
+<!--{if is_array($newarr) === true}-->
+    newarr是数组.
+<!--{else}-->
+    new_arr不是数组.
+<!--{/if}-->
+
+<h2>eval代码兼容</h2>
+php当前时间: eval写法 {eval echo date('Y-m-d')}
+
+#info: 当语言标识找不到时, 将直接返回标识.
+<h2>语言包使用</h2>
+显示: <span style="color: red;">{lang msg}</span>
+
+#info: 注意下在调用的是自动搜索
+{load __footer}
