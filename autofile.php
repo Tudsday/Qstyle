@@ -4,7 +4,7 @@ error_reporting(E_ALL ^E_NOTICE);
 include('./include/Qstyle.class.php');
 define('TIME', microtime(true));
 // 我们设置一个目录.
-$Qstyle = new Qstyle(true,true);
+$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);
 
 // 测试程序启用每次均更新, 假如不设置此项, 将在模板修改之后才更新.
 $Qstyle->conf( Qstyle::CNF_UPDATE, true);

@@ -6,7 +6,7 @@ define('TIME', microtime(true));
 // 我们设置一个目录.
 // 支持多个目录. 如 new Qstyle('./Data/default/','aa/bb/cc/', 'new/img/');  当然也是支持数组的 new Qstyle( array('./Data/default/','aa/bb/cc/', 'new/img/'));
 // 需要注意的是, 数组后面的目录搜索时优化使用, 比如三个目录中都有a.html模板, 那么它会先选择 new/img/ 当中的.
-$Qstyle = new Qstyle(true,true);
+$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);
 
 // 设置默认的模板后缀, 这步可以省略, 程序默认为.html. 第二个参数为缓存后缀, 一般不需要设置.
 $Qstyle->conf(Qstyle::CNF_SUFFIX, '.html');

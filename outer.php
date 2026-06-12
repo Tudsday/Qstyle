@@ -5,7 +5,7 @@ include('./include/Qstyle.class.php');
 define('TIME', microtime(true));
 
 // 我们设置一个目录.
-$Qstyle = new Qstyle(true,true);
+$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);
 
 $Qstyle->conf(Qstyle::CNF_TPLDIR, ['./Data/default']);
 

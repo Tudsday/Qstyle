@@ -40,14 +40,13 @@ class QStyle{
 	 * 设置模板目录、缓存目录，并生成基于主机名和文件内容的加密密钥，
 	 * 同时规范化模板文件后缀（确保以点号开头，去除多余的分隔符）。
 	 *
-	 * @param  bool $update 是否开启模板更新检查，默认为 false
-	 * @param  bool $debug  是否开启调试模式，默认为 false
+	 * @param array $args 可选的配置项数组，支持通过常量名或属性名设置配置项，如 [QStyle::CNF_UPDATE => true] 或 ['Cnf_update' => true]。
 	 */
-	public function __construct(bool $update = false, bool $debug = false){
-		$this->conf(self::CNF_UPDATE, $update);
-		$this->conf(self::CNF_DEBUG, $debug);
+	public function __construct(array $args){
+		foreach($args as $k => $v){
+			$this->conf($k, $v);
+		}
         $this->Cnf_suffix  = '.' . ltrim($this->Cnf_suffix,'.\//');
-
 		$this->debug('construct', ($_SERVER['HTTP_HOST'] ?? ''));
 	}
 
@@ -722,16 +721,15 @@ class QStyle{
 
         $this->rwtplfile = $this->autofile($tpl,'tpl');
 		$evalcode = '';
-		// 把它理解成解析html字符.
-		if($tpl && !$this->rwtplfile['tpl']){
-			$this->debug('parse_string', strlen($tpl));
-			$evalcode = $this->parse_tpl($tpl);
-		}
-
-		if(!$evalcode)
-		if($fkey && $this->rwtplfile['tpl']){
+		if($fkey){
 			// 当$fkey有值时, 可取三类字符[block,#id,.class].
-			$tplContent = $this->preg__file($this->rwtplfile['tpl']);
+			if($this->rwtplfile['tpl']){
+				$tplContent = $this->preg__file($this->rwtplfile['tpl']);
+			}else{
+				$tplContent = $tpl;
+				// 如果不是文件, 就是字符串本身.
+			}
+
 			$tplcode = '';
 			if($tplContent){
 				if( str_starts_with($fkey, '#') || str_starts_with($fkey, '.') ){
@@ -746,6 +744,13 @@ class QStyle{
 			
 			$this->debug('load3key_'.$fkey, strlen($tplcode).' > 0 ok');
 			$evalcode = $this->parse_tpl($tplcode);
+		}
+
+		// 把它理解成解析html字符.
+		if(!$evalcode)
+		if($tpl && !$this->rwtplfile['tpl']){
+			$this->debug('parse_string', strlen($tpl));
+			$evalcode = $this->parse_tpl($tpl);
 		}
 
 		$errint =0;

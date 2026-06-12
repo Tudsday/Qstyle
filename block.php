@@ -4,7 +4,7 @@ error_reporting(E_ALL ^E_NOTICE);
 include('./include/Qstyle.class.php');
 define('TIME', microtime(true));
 // 我们设置一个目录.
-$Qstyle = new Qstyle();
+$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);
 
 $dateinfo = date('Y-m-d H:i:s');
 

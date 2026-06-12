@@ -73,7 +73,7 @@ Qstyle/
 <?php
 include('./include/Qstyle.class.php');
 
-$Qstyle = new Qstyle(true, true);   // 参数1=自动更新, 参数2=调试模式
+$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);   // 参数1=自动更新, 参数2=调试模式
 $Qstyle->conf(Qstyle::CNF_TPLDIR, './Data/default');  // 设置模板目录
 $Qstyle->conf(Qstyle::CNF_AUTODIR, ['./testing']);    // 设置静态搜索目录
 
@@ -324,12 +324,12 @@ $Qstyle->setlang(['greeting' => ['hello' => '你好']]);
 
 ### 6.1 当前版本（v8.5.0）
 
-#### `__construct(bool $update = false, bool $debug = false)`
+#### `__construct(array $args)`
 
 构造函数，初始化引擎。
 
 ```php
-$Qstyle = new Qstyle(true, true);
+$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);
 ```
 
 #### `conf(string $key, mixed $value): bool`
@@ -533,7 +533,7 @@ $Qstyle->setlang(['greeting' => ['hello' => '你好', 'bye' => '再见']]);
 开启调试后，页面底部自动输出调试信息面板：
 
 ```php
-$Qstyle = new Qstyle(true, true);   // 第二个参数开启调试
+$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);   // 第二个参数开启调试
 ```
 
 调试信息包含：
@@ -609,24 +609,24 @@ $Qstyle->clear();   // 删除缓存目录中所有 .php 文件
 
 ---
 
-## 十、两版本对比
+## 十、版本特性
 
-| 特性 | v8.5.0（当前） | v8.1.0（兼容） |
-|------|----------------|----------------|
-| PHP 版本要求 | **PHP 8.3+** | PHP 5.x+ |
-| 严格类型 | `declare(strict_types=1)` | 无 |
-| 类型系统 | 全部 typed properties | 无类型声明 |
-| 配置方式 | `conf()` + 常量 | 公共属性 + setter 方法 |
-| 模板安全 | 禁止 `<?` 标签 + 表达式校验 | Base64 编码保护 PHP 块 |
-| XSS 防护 | `{enhtml}` 内置 | 无 |
-| 选择器提取 | DOMDocument + XPath | 无 |
-| 常量数组 | `{ABC[key][sub]}` | 无 |
-| 文件锁 | `LOCK_EX/LOCK_SH` | `LOCK_EX/LOCK_SH` |
-| 变量提取 | 首次 `load` 时提取全局变量 | `display` 时提取 |
-| CSS/JS 解析 | 通过 `{__file.css}` 引入 | 独立 `__preg_source_parse` 管线 |
-| 调试输出 | textarea 统一格式 | 逐行 div 格式 |
-| 注释标注 | `// TODO:` `// BUG:` `# info:` | 同 |
-| 缓存文件名 | SHA256(文件SHA256 + enkey) | MD5(文件 + ankey + host) |
+| 特性 | v8.5.0 |
+|------|--------|
+| PHP 版本要求 | **PHP 8.3+** |
+| 严格类型 | `declare(strict_types=1)` |
+| 类型系统 | 全部 typed properties |
+| 配置方式 | `conf()` + 常量 |
+| 模板安全 | 禁止 `<?` 标签 + 表达式校验 |
+| XSS 防护 | `{enhtml}` 内置 |
+| 选择器提取 | DOMDocument + XPath |
+| 常量数组 | `{ABC[key][sub]}` |
+| 文件锁 | `LOCK_EX/LOCK_SH` |
+| 变量提取 | 首次 `load` 时提取全局变量 |
+| CSS/JS 解析 | 通过 `{__file.css}` 引入 |
+| 调试输出 | textarea 统一格式 |
+| 注释标注 | `// TODO:` `// BUG:` `# info:` |
+| 缓存文件名 | SHA256(文件SHA256 + enkey) |
 
 ---
 
