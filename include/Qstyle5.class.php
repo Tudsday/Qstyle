@@ -369,14 +369,14 @@ class QStyle{
 
         $expandLoads = function ($source, $depth = 0) use (&$expandLoads, $resolveLoadsTarget) {
             $source = strtr($source, array('<!--{' => '{', '}-->' => '}'));
-            if($depth >= 30 || preg_match('/\{loads\s+[^{}]+\}/iu', $source) !== 1){
+            if($depth >= 30 || preg_match('/\{(loads|fetchs)\s+[^{}]+\}/iu', $source) !== 1){
                 return $source;
             }
 
             $result = preg_replace_callback(
-                '/\{loads\s+([^{}]+)\}/iu',
+                '/\{(loads|fetchs)\s+([^{}]+)\}/iu',
                 function ($matches) use (&$expandLoads, $resolveLoadsTarget, $depth) {
-                    $target = $resolveLoadsTarget($matches[1]);
+                    $target = $resolveLoadsTarget($matches[2]);
                     if($target === ''){
                         return '';
                     }
@@ -487,11 +487,11 @@ class QStyle{
             $php = '';
         }
 
-        // 将 {load ...} 编译为模板加载代码，支持字面量模板名和变量模板名。
+        // 将 {load ...} {fetch ...} 编译为模板加载代码，支持字面量模板名和变量模板名。
         $php = preg_replace_callback(
-            '/\{load\s+([^{}]+)\}/iu',
+            '/\{(load|fetch)\s+([^{}]+?)\s*\}/iu',
             function ($matches) use ($compileLoad) {
-                return $compileLoad($matches[1]);
+                return $compileLoad($matches[2]);
             },
             $php
         );
@@ -751,6 +751,16 @@ class QStyle{
         return $filecode;
     }
 
+	/**
+	 * 加载并返回模板内容。
+	 *
+	 * 根据模板标识定位模板文件，若编译缓存不存在或已过期则重新编译，
+	 * 然后包含执行编译后的缓存文件，并将渲染结果作为字符串返回。
+	 */
+	public function fetch($tpl, $fkey = ''){
+		return $this->load($tpl, $fkey);
+	}
+
     /**
      * 加载并渲染模板文件。
      *
@@ -995,7 +1005,7 @@ class QStyle{
     }
 
     protected function loads($tpl){
-        // {loads file} {loads $var} 直接将源码返回.
+        // {loads file} {loads $var}  {fetchs file} {fetchs $var} 直接将源码返回.
         if(strpos($tpl, '__') === 0 && strpos($tpl, "\n") === false){
             $tpl = trim($tpl, '_');
         }
@@ -1009,7 +1019,7 @@ class QStyle{
         if($tem['tpl']){
             return $this->preg__file($tem['tpl']);
         }else{
-            return '';
+            return $tpl;
         }
     }
 

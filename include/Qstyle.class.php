@@ -357,14 +357,14 @@ class QStyle{
 
 		$expandLoads = function (string $source, int $depth = 0) use (&$expandLoads, $resolveLoadsTarget): string {
 			$source = strtr($source, ['<!--{' => '{', '}-->' => '}']);
-			if($depth >= 30 || preg_match('/\{loads\s+[^{}]+\}/iu', $source) !== 1){
+			if($depth >= 30 || preg_match('/\{(loads|fetchs)\s+[^{}]+\}/iu', $source) !== 1){
 				return $source;
 			}
 
 			return preg_replace_callback(
-				'/\{loads\s+([^{}]+)\}/iu',
+				'/\{(loads|fetchs)\s+([^{}]+)\}/iu',
 				function (array $matches) use (&$expandLoads, $resolveLoadsTarget, $depth): string {
-					$target = $resolveLoadsTarget($matches[1]);
+					$target = $resolveLoadsTarget($matches[2]);
 					if($target === ''){
 						return '';
 					}
@@ -417,7 +417,7 @@ class QStyle{
 
 		$blockTemplates = [];
 
-		// 将 {loads ...} 先展开为模板源码，并递归展开其中的 {loads ...}。
+		// 将 {loads|fetchs ...} 先展开为模板源码，并递归展开其中的 {loads|fetchs ...}。
 		$php = $expandLoads($php);
 
 		if($this->html_replace['<'] ?? null){
@@ -458,10 +458,10 @@ class QStyle{
 		$php = preg_replace('/^[\t ]*\/\/(?:info|todo|bug)\s*:(.*)(?:\n|$)/imu', '', $php) ?? $php;
 		$php = preg_replace('/^[\t ]*#(?:info|todo|bug)\s*:.*(?:\n|$)/imu', '', $php) ?? $php;
 
-		// 将 {load ...} 编译为模板加载代码，支持字面量模板名和变量模板名。
+		// 将 {load ...}  {fetch ...} 编译为模板加载代码，支持字面量模板名和变量模板名。
 		$php = preg_replace_callback(
-			'/\{load\s+([^{}]+)\}/iu',
-			static fn(array $matches): string => $compileLoad($matches[1]),
+			'/\{(load|fetch)\s+([^{}]+?)\s*\}/iu',
+			static fn(array $matches): string => $compileLoad($matches[2]),
 			$php
 		) ?? $php;
 
@@ -651,6 +651,16 @@ class QStyle{
 
 		$this->print_html = '';
 		return $filecode;
+	}
+	
+	/**
+	 * 加载并返回模板内容。
+	 *
+	 * 根据模板标识定位模板文件，若编译缓存不存在或已过期则重新编译，
+	 * 然后包含执行编译后的缓存文件，并将渲染结果作为字符串返回。
+	 */
+	public function fetch(string $tpl, string $fkey = ''): string{
+		return $this->load($tpl, $fkey);
 	}
 
 	/**
@@ -908,7 +918,7 @@ class QStyle{
 		if($tem['tpl']){
 			return $this->preg__file($tem['tpl']);
 		}else{
-			return '';
+			return $tpl;
 		}	
 	}
 

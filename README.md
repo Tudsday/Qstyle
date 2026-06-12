@@ -121,7 +121,7 @@ $Qstyle->conf(Qstyle::CNF_TPLDIR,   './Data/default');  // 模板目录
 $Qstyle->conf(Qstyle::CNF_AUTODIR,  ['./testing']);     // 自动搜索目录
 $Qstyle->conf(Qstyle::CNF_CACHEDIR, './cache');         // 缓存目录
 $Qstyle->conf(Qstyle::CNF_SUFFIX,   '.html');            // 模板后缀
-$Qstyle->conf(Qstyle::CNF_UPDATE,   true);               // 强制每次重编译
+$Qstyle->conf(Qstyle::CNF_UPDATE,   true);               // 强制每次重新编译
 $Qstyle->conf(Qstyle::CNF_DEBUG,    true);               // 开启调试
 ```
 
@@ -207,14 +207,14 @@ $Qstyle->conf(Qstyle::CNF_DEBUG,    true);               // 开启调试
 
 | 语法 | 示例 | 说明 |
 |------|------|------|
-| `{load name}` | `{load header}` | 动态引入模板文件 |
-| `{load $var}` | `{load $header}` | 变量模板名引入 |
-| `{load __name}` | `{load __footer}` | 自动搜索模板文件 |
-| `{loads name}` | `{loads header}` | 静态引入（编译时展开源码） |
+| `{load name}` / `{fetch name}` | `{load header}` | 动态引入模板文件 |
+| `{load $var}` / `{fetch $var}` | `{load $header}` | 变量模板名引入 |
+| `{load __name}` / `{fetch __name}` | `{load __footer}` | 自动搜索模板文件 |
+| `{loads name}` / `{fetchs name}` | `{loads header}` | 静态引入（编译时展开源码） |
 
-**`{load}` 与 `{loads}` 的区别：**
-- `{load}` — 运行时动态 include，每次执行都会走一遍
-- `{loads}` — 编译时直接将源码展开到当前位置，后续不再动态加载，性能更优
+**`{load}` / `{fetch}` 与 `{loads}` / `{fetchs}` 的区别：**
+- `{load}` / `{fetch}` — 运行时动态 include，每次执行都会走一遍
+- `{loads}` / `{fetchs}` — 编译时直接将源码展开到当前位置，后续不再动态加载，性能更优
 
 ### 5.6 Block 区块
 
@@ -768,7 +768,7 @@ $Qstyle->load('resource');
 | **自动搜索** | 目录结构仅在首次使用时扫描并缓存到内存，不重复 I/O |
 | **文件锁** | 非阻塞锁（LOCK_NB），并发写入不卡顿 |
 | **变量提取** | 全局变量仅在首次 `load` 时提取一次（`EXTR_SKIP` 避免覆盖） |
-| **静态引入** | `{loads}` 编译时展开，零运行时开销 |
+| **静态引入** | `{loads}` / `{fetchs}` 编译时展开，零运行时开销 |
 | **安全校验** | 表达式正则校验在编译阶段完成，不影响缓存执行速度 |
 
 ---
