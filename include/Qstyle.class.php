@@ -323,8 +323,8 @@ class QStyle{
 			}
 
 			if($expression[0] === '$' && preg_match('/^\$+([A-Za-z_\x80-\xff][A-Za-z0-9_\x80-\xff]*)$/u', $expression, $matches) === 1){
-				$key = $matches[1];
-				$value = $this->templates_assign[$key] ?? ($GLOBALS[$key] ?? null);
+				$key = $matches[1]??'';
+				$value = ($this->var_assign[$key] ?? ($GLOBALS[$key] ?? null));
 				if(is_string($value) || is_numeric($value)){
 					return (string) $value;
 				}
@@ -343,8 +343,8 @@ class QStyle{
 			}
 
 			if($expression[0] === '$' && preg_match('/^\$+([A-Za-z_\x80-\xff][A-Za-z0-9_\x80-\xff]*)$/u', $expression, $matches) === 1){
-				$key = $matches[1];
-				$value = $this->templates_assign[$key] ?? ($GLOBALS[$key] ?? null);
+				$key = $matches[1]??'';
+				$value = ($this->var_assign[$key] ?? ($GLOBALS[$key] ?? null));
 				if(is_string($value) || is_numeric($value)){
 					return (string) $value;
 				}
