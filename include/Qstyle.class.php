@@ -42,7 +42,7 @@ class QStyle{
 	 *
 	 * @param array $args 可选的配置项数组，支持通过常量名或属性名设置配置项，如 [QStyle::CNF_UPDATE => true] 或 ['Cnf_update' => true]。
 	 */
-	public function __construct(array $args){
+	public function __construct(array $args = []){
 		foreach($args as $k => $v){
 			$this->conf($k, $v);
 		}

@@ -15,7 +15,7 @@ error_reporting(E_ALL ^E_NOTICE);
 
 //引入类库文件;
 include('./include/Qstyle.class.php');
-$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);
+$Qstyle = new Qstyle();
 
 $Qstyle->conf(Qstyle::CNF_TPLDIR, './Data/default');
 $Qstyle->conf(Qstyle::CNF_AUTODIR, ['./testing'] );

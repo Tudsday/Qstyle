@@ -73,7 +73,7 @@ Qstyle/
 <?php
 include('./include/Qstyle.class.php');
 
-$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);   // 参数1=自动更新, 参数2=调试模式
+$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);
 $Qstyle->conf(Qstyle::CNF_TPLDIR, './Data/default');  // 设置模板目录
 $Qstyle->conf(Qstyle::CNF_AUTODIR, ['./testing']);    // 设置静态搜索目录
 
@@ -533,7 +533,7 @@ $Qstyle->setlang(['greeting' => ['hello' => '你好', 'bye' => '再见']]);
 开启调试后，页面底部自动输出调试信息面板：
 
 ```php
-$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);   // 第二个参数开启调试
+$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);
 ```
 
 调试信息包含：
@@ -638,7 +638,7 @@ $Qstyle->clear();   // 删除缓存目录中所有 .php 文件
 <?php
 include('./include/Qstyle.class.php');
 
-$Qstyle = new Qstyle(true, true);
+$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);
 $Qstyle->conf(Qstyle::CNF_TPLDIR, './Data/default');
 $Qstyle->conf(Qstyle::CNF_AUTODIR, ['./testing']);
 
@@ -670,7 +670,7 @@ $Qstyle->load('mypage');
 <?php
 include('./include/Qstyle.class.php');
 
-$Qstyle = new Qstyle(true, false);
+$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true]);
 $Qstyle->conf(Qstyle::CNF_TPLDIR, './Data/default');
 
 $dateinfo = date('Y-m-d H:i:s');
@@ -735,7 +735,7 @@ $Qstyle->load('i18n');
 <?php
 include('./include/Qstyle.class.php');
 
-$Qstyle = new Qstyle(true, true);
+$Qstyle = new Qstyle([QStyle::CNF_UPDATE => true, QStyle::CNF_DEBUG => true]);
 $Qstyle->conf(Qstyle::CNF_TPLDIR, ['./Data/default']);
 $Qstyle->conf(Qstyle::CNF_AUTODIR, ['./testing', './assets']);
 
