@@ -4,6 +4,29 @@
  * @category: 分享工作室;
  * @var; Qstyle.class.php;
  * @version: Qstyle 8.5.0 2024-06-11;
+ *
+ * @see QStyle::__construct()   构造函数，初始化模板引擎
+ * @see QStyle::clear()         清理编译缓存文件
+ * @see QStyle::conf()          设置或合并配置项
+ * @see QStyle::assign()        向模板分配变量
+ * @see QStyle::replace()       设置模板内容替换规则
+ * @see QStyle::print()         加载并输出模板内容（高亮显示）
+ * @see QStyle::fetch()         加载并返回模板内容
+ * @see QStyle::load()          加载并渲染模板文件
+ * @see QStyle::setlang()       设置语言包条目
+ * @see QStyle::__destruct()    析构函数，输出调试信息
+ *
+ * @see QStyle::enhtml()        将字符串转换为 HTML 实体
+ * @see QStyle::parse_tpl()     将模板内容编译为 PHP 代码
+ * @see QStyle::getlang()       获取语言包条目
+ * @see QStyle::loads()         加载模板源码（用于 {loads} 标签）
+ * @see QStyle::autofile()      自动定位文件路径
+ * @see QStyle::preg__file()    带文件锁的安全文件读写操作
+ * @see QStyle::_A()            安全数组包装器
+ * @see QStyle::extractHtmlContentBySelector()  提取 #id 或 .class 内容
+ * @see QStyle::xpathLiteral()  构造 XPath 字符串字面量
+ *
+ * @see QStyle::debug()         调试信息记录
  */
 
 class QStyle{
