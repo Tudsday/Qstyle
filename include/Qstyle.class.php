@@ -67,6 +67,8 @@ class QStyle{
 	}
 
 	private function debug(string $key, mixed $val): array{
+		if(!$this->Cnf_debug)
+			return [];
 		$this->debugs[$key] = $val;
 		return $this->debugs;
 	}

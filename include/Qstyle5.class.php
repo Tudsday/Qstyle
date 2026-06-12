@@ -68,6 +68,8 @@ class QStyle{
     }
 
     private function debug($key, $val){
+        if(!$this->Cnf_debug)
+			return array();
         $this->debugs[$key] = $val;
         return $this->debugs;
     }
