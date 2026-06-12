@@ -129,59 +129,54 @@ $install6 = highlight_string("
 # 第七步
 $install7 = highlight_string('
 	<?php
-          # 以下代码规则是针对html模板文件而讲解.
-           "{qstyle debug}" 此语法用来调试模板引擎的. 
-	      "<?php ?>" 直接写法, 此方法可像写php一样方便.
+          # 以下代码规则是针对html模板文件而讲解. 
 	      "{eval echo 111}"	 智能模式.简单运行php代码;
 	      "{block name}{/block}" block代码运行块, 当你写完一块后, 后续可以多次调用;
-	      "{LF}" 为提示产生换行符, 即\n\r
-	      "{lang zn}" 语言模板语法, 可通过方法 set_language($key, $val) 实现传入语言包.
+	      "{LF}" 为提示产生换行符, 即&#10;
+	      "{lang zn}" 语言模板语法, 可通过方法 setlang($key, $val) 实现传入语言包.
           "{load header}" 普通常用的模板文件相互引入;
-	      "{load $footer}"	模板文件相互引入的过程支持变量;
+	      "{load $footer}" 模板文件相互引入的过程支持变量;
 	      "{loads header}" 模板文件相互引入支持静态引入;
-          "{# myname.jpg}" 静态引入资源, 支持图片, css, js, ico.
-          "// TODO: 需要标注的信息" 新版本支持todo写法.分号为结束符号
-          "// BUG: 需要标注的bug信息" 新版本支持bug写法. 分号为结束符号
+          "//TODO: 需要标注的信息" 新版本支持todo写法.分号为结束符号
+          "#BUG: 需要标注的bug信息" 新版本支持bug写法. 分号为结束符号
           "{__my.jpg}" 支持这样引入文件, 不需要关心路径.
-          * 另外支持CSS, JS引入时套入模板语法. 引入路径将被改变.
 	?>
 	',true);
 # 第八步
 $install8 = highlight_string("
 	<?php
 	include('./include/Qstyle.class.php');
-	\$Qstyle = new Qstyle();
-    
-    # 以下配置为默认, 可以实例化后自行修改.
-	\$Qstyle->templates_new = [true|false]; //设置当次更新, 系统更新可强制配置为true;
-	\$Qstyle->templates_postfix = '.html'; //模板后缀;
-    \$Qstyle->templates_var     = 'All';   //变量获取模式, All,ASSIGN;
-	\$Qstyle->templates_auto = [true|false]; //自动更新模板;
-	\$Qstyle->templates_caching = '.php'; //缓存后缀;
-	\$Qstyle->templates_space = [true|false]; //清除无意义字符
-    \$Qstyle->templates_isdebug     = [true|false]; // 是否启用日志
-    \$Qstyle->templates_ankey   = false;        // 安全码
-    \$Qstyle->templates_replace = array(); //用于智能更新,可以将模板中的内容直接替换;
-    
-    # 或者用方法来调用
-    set_templates_type          // 变量获取模式, All,ASSIGN;
-    set_templates_suffix        // 第一个参数模板后缀, 第二个参数缓存后缀
-    set_templates_auto          // [true|false] 自动更新模板;
-    set_templates_space         // [true|false] 清除无意义字符
-    set_templates_isdebug       // [true|false] 是否启用日志,本功能将显示模板运作过程.
-    set_templates_oncenew       // [true|false] 设置当次更新, 每次刷新均解析模板.
-    set_templates_ankey         // 安全码,此码影响缓存文件的生成算法.
-    
-    set_templates_path          // 设置模板路径, 多个路径可调用多次. 系统自动从最后设置的路径开始往回寻找.
-                       // 项目架构中, 建议不要超过三个模板目录, 以免路径规划混乱.
-    set_cache_path              // 设置缓存路径 支持一个路径.
-    set_auto_path             // 设置自动搜索目录路径, 此目录影响到自动文件匹配功能, 如{__a.jpg} 这类写法的路径搜索.
-    
-    set_templates_replace       // 设置替换模板数据的方法, ['div','newdiv'], 模板将会把所有的div字样替换成newdiv
-    
-    set_static_assign           // 设置静态文件静态变量, 此用于CSS, JS等静态文件. 
-    set_language                // 设置语言包. ['key','val'] 方法使用如 assign
-    
+
+	# 实例化, 可传入配置数组
+	\$Qstyle = new Qstyle([
+	    QStyle::CNF_UPDATE => true,   // 是否每次请求都重编译模板
+	    QStyle::CNF_DEBUG  => true,   // 开启调试模式
+	]);
+
+	# 使用 conf() 方法配置, 支持常量名或属性名
+	\$Qstyle->conf(QStyle::CNF_TPLDIR,   './Data/default');  // 模板目录
+	\$Qstyle->conf(QStyle::CNF_AUTODIR,  ['./testing']);     // 自动搜索目录
+	\$Qstyle->conf(QStyle::CNF_CACHEDIR, './cache');         // 缓存目录
+	\$Qstyle->conf(QStyle::CNF_SUFFIX,   '.html');            // 模板后缀
+	\$Qstyle->conf(QStyle::CNF_UPDATE,   true);               // 强制每次重编译
+	\$Qstyle->conf(QStyle::CNF_DEBUG,    true);               // 开启调试
+	\$Qstyle->conf(QStyle::CNF_ENKEY,    'my_secret_key');    // 安全密钥, 影响缓存文件名
+
+	# 变量赋值
+	\$Qstyle->assign('title', 'Hello');           // 单个赋值
+	\$Qstyle->assign(['name' => 'World']);        // 批量赋值
+
+	# 语言包
+	\$Qstyle->setlang('msg', 'Welcome');
+	\$Qstyle->setlang(['greeting' => ['hello' => 'Hi']]);
+
+	# 模板内容替换
+	\$Qstyle->replace(['old_text' => 'new_text'], '<');  // 解析前替换
+	\$Qstyle->replace(['old_text' => 'new_text'], '>');  // 解析后替换
+
+	# 加载并渲染模板
+	\$Qstyle->load('phpnew');
+
 	?>
 	",true);
 
@@ -205,10 +200,8 @@ $install10 = highlight_string("
 	<?php 
 	include('./include/Qstyle.class.php');
 	\$Qstyle = new Qstyle();
+
 	#建议使用assign方法设置变量. 会让架构整体更明了, 知道哪些变量是释放到模板的.
-    
-    // 关闭系统自动捕捉全局变量
-    \$Qstyle->templates_var = 'assign'; // 可省略步骤!
     \$Qstyle->assign('vars', 100); // 设置\$vars为100;
     
     // 当然, 你可以进行数组释放变量
@@ -228,8 +221,7 @@ $install11 = highlight_string("
 	# 静态文件自动匹配功能. 为了解决图片, js, css文件路径问题而生.
 
     // 首先你需要告诉引擎, 图片, js, css文件放在哪个目录, 即静态文件.
-    // 使用方法 set_auto_path 来设置路径, 调用多次可加载为多个目录.
-    \$Qstyle->set_auto_path('./Static/');
+    \$Qstyle->conf(QStyle::CNF_AUTODIR, './Static/');
     # 以站点根目录为起点寻找Static目录, 方法会自动搜寻目录中的所有文件, 无论里面放了多少层目录, 它都会找到. 
     # 方法可以调用多次, 以支持多个目录搜索. 优先权跟模板目录一样以倒序为标准. 引擎以这样来适应叠加目录.
     
@@ -258,17 +250,13 @@ $install12 = highlight_string("
     # 为了解决模板与css, js相独立的问题, 模板引擎增加了静态文件解析功能. 所有的引入文件js, css都将具有语法解析功能.
 	# 静态文件除了可解析自动路径外, 也支持简单的变量解析了.
     # 为什么不像模板一样, 全部解析语法? 因为css, js文件解析后, 需要保存为相同的后缀, 它是不经过php的, 所以无法释放php代码. 全部解析成静态的值.
-    # 所以, set_static_assign 设置变量的方法由此而产生, 建议项目中用这个方法设置的值,一直保持不变.理解为静态变量. css, js里面默认支持常量,也不失为一种方法.
+    # 所以, assign 设置变量的方法由此而产生, 建议项目中用这个方法设置的值,一直保持不变.理解为静态变量. css, js里面默认支持常量,也不失为一种方法.
     
     # 建议手工释放静态文件中的变量. 此步也可省略, 它会自动继承全局assign. 全局assign的可变性将对结果有所影响.
-    \$Qstyle->set_static_assign('color','red');
-    \$Qstyle->set_static_assign(array('keys'=>'red'));  // {\$keys}
-    \$Qstyle->set_static_assign('color',array('keys'=>'red'));  // \$color['keys'];
-    
-    # css, js 文件如普通模板一样写 {\$color} {\$color['keys']} 都可以得到 red的值. 仅此标准.
-    # css, js 文件中可以取得全局常量. {DEFINE}  跟普通模板语法一致.
-    # css, js 文件中可以{__a.jpg} 取得静态文件路径, 见上一步详细.
-    
+    \$Qstyle->assign('color','red');
+    \$Qstyle->assign(array('keys'=>'red'));  // {\$keys}
+    \$Qstyle->assign('color',array('keys'=>'red'));  // \$color['keys'];
+        
     # 解析后的静态文件被写入在缓存目录中.
     \$Qstyle->load('phpnew');
 ",true);
